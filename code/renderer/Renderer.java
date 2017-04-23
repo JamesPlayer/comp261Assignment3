@@ -27,6 +27,7 @@ public class Renderer extends GUI {
 		 */
 		try {
 			scene = loadScene(file);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,7 +39,7 @@ public class Renderer extends GUI {
 	
 	protected Scene loadScene(File file) throws FileNotFoundException, IOException {
 		BufferedReader data = null;
-		String lightRGB = null;
+		String lightStr = null;
 		String[] values = null;
 		Vector3D light = null;
 		String line = null;
@@ -47,8 +48,8 @@ public class Renderer extends GUI {
 		int[] polygonColors = new int[3];
 		
 		data = new BufferedReader(new FileReader(file));
-		lightRGB = data.readLine();
-		values = lightRGB.split(" ");
+		lightStr = data.readLine();
+		values = lightStr.split(" ");
 		light = new Vector3D(Float.parseFloat(values[0]), Float.parseFloat(values[1]), Float.parseFloat(values[2]));
 		
 		while ((line = data.readLine()) != null) {

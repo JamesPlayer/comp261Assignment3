@@ -19,10 +19,7 @@ public class Pipeline {
 	 * should be hidden), and false otherwise.
 	 */
 	public static boolean isHidden(Polygon poly) {
-		Vector3D edge1 = poly.getVertices()[1].minus(poly.getVertices()[0]);
-		Vector3D edge2 = poly.getVertices()[2].minus(poly.getVertices()[1]);
-		Vector3D normal = edge1.crossProduct(edge2);
-		return normal.z > 0;
+		return getNormal(poly).z > 0;
 	}
 
 	/**
@@ -40,8 +37,33 @@ public class Pipeline {
 	 *            on the direction.
 	 */
 	public static Color getShading(Polygon poly, Vector3D lightDirection, Color lightColor, Color ambientLight) {
-		// TODO fill this in.
-		return null;
+		int r, g, b;
+		float normalizedRed, normalizedGreen, normalizedBlue;
+		Vector3D unitNormal = getNormal(poly).unitVector();
+		float cosTheta = unitNormal.cosTheta(lightDirection);
+		float multiplier = 1 / (float) 255;
+		
+		// Ignore lightColor if lightDirection is coming from the back
+		if (lightDirection.z > 0) {
+			lightColor = new Color(0, 0, 0);
+		}
+		
+		normalizedRed = ((multiplier*ambientLight.getRed() + multiplier*lightColor.getRed() * cosTheta) * multiplier*poly.getReflectance().getRed());
+		r = (int) (normalizedRed * 255);
+		
+		normalizedGreen = ((multiplier*ambientLight.getGreen() + multiplier*lightColor.getGreen() * cosTheta) * multiplier*poly.getReflectance().getGreen());
+		g = (int) (normalizedGreen * 255);
+		
+		normalizedBlue = ((multiplier*ambientLight.getBlue() + multiplier*lightColor.getBlue() * cosTheta) * multiplier*poly.getReflectance().getBlue());
+		b = (int) (normalizedBlue * 255);
+		
+		return new Color(r, g, b);
+	}
+	
+	public static Vector3D getNormal(Polygon poly) {
+		Vector3D edge1 = poly.getVertices()[1].minus(poly.getVertices()[0]);
+		Vector3D edge2 = poly.getVertices()[2].minus(poly.getVertices()[1]);
+		return edge1.crossProduct(edge2);
 	}
 
 	/**
