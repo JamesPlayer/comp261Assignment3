@@ -126,6 +126,7 @@ public class Pipeline {
 		};
 		
 		setXCoords(edgeList, edges);
+		setZCoords(edgeList, edges);
 		
 		return edgeList;
 	}
