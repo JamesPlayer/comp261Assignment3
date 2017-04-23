@@ -19,8 +19,10 @@ public class Pipeline {
 	 * should be hidden), and false otherwise.
 	 */
 	public static boolean isHidden(Polygon poly) {
-		// TODO fill this in.
-		return false;
+		Vector3D edge1 = poly.getVertices()[1].minus(poly.getVertices()[0]);
+		Vector3D edge2 = poly.getVertices()[2].minus(poly.getVertices()[1]);
+		Vector3D normal = edge1.crossProduct(edge2);
+		return normal.z > 0;
 	}
 
 	/**
