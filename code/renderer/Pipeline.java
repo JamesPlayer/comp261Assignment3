@@ -115,10 +115,73 @@ public class Pipeline {
 	 */
 	public static EdgeList computeEdgeList(Polygon poly) {
 		
-		float ymin = Math.min(poly.vertices[0].y, Math.min(poly.vertices[1].y, poly.vertices[2].y));
-		float ymax = Math.max(poly.vertices[0].y, Math.max(poly.vertices[1].y, poly.vertices[2].y));
+		int ymin = (int) (Math.min(poly.vertices[0].y, Math.min(poly.vertices[1].y, poly.vertices[2].y)));
+		int ymax = (int) (Math.max(poly.vertices[0].y, Math.max(poly.vertices[1].y, poly.vertices[2].y)));
+		EdgeList edgeList = new EdgeList(ymin, ymax);
 		
-		return null;
+		Vector3D[][] edges = new Vector3D[][]{
+			new Vector3D[]{poly.vertices[0],poly.vertices[1]},
+			new Vector3D[]{poly.vertices[1],poly.vertices[2]},
+			new Vector3D[]{poly.vertices[2],poly.vertices[0]}
+		};
+		
+		setXCoords(edgeList, edges);
+		
+		return edgeList;
+	}
+	
+	protected static void setXCoords(EdgeList edgeList, Vector3D[][] edges) {
+		
+		float x, slope;
+		int y;
+		
+		for (Vector3D[] edge : edges) {
+			slope = (edge[1].x - edge[0].x) / (float) (edge[1].y - edge[0].y);
+			x = edge[0].x;
+			y = (int) (edge[0].y);
+			
+			// Going down
+			if (edge[0].y < edge[1].y) {
+				while (y <= Math.round(edge[1].y)) {
+					edgeList.rows.get(y).leftX = x;
+					x = x + slope;
+					y++;
+				}
+			} else {
+				while (y >= Math.round(edge[1].y)) {
+					edgeList.rows.get(y).rightX = x;
+					x = x - slope;
+					y--;
+				}
+			}
+		}	
+	}
+	
+	protected static void setZCoords(EdgeList edgeList, Vector3D[][] edges) {
+		
+		float z, slope;
+		int y;
+		
+		for (Vector3D[] edge : edges) {
+			slope = (edge[1].z - edge[0].z) / (float) (edge[1].y - edge[0].y);
+			z = edge[0].z;
+			y = (int) (edge[0].y);
+			
+			// Going down
+			if (edge[0].y < edge[1].y) {
+				while (y <= Math.round(edge[1].y)) {
+					edgeList.rows.get(y).leftZ = z;
+					z = z + slope;
+					y++;
+				}
+			} else {
+				while (y >= Math.round(edge[1].y)) {
+					edgeList.rows.get(y).rightZ = z;
+					z = z - slope;
+					y--;
+				}
+			}
+		}	
 	}
 
 	/**

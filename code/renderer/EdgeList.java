@@ -15,11 +15,16 @@ public class EdgeList {
 	
 	public int startY;
 	public int endY;
-	public Map<Integer, Float[]> rows = new HashMap<Integer, Float[]>();
+	public Map<Integer, EdgeListRow> rows = new HashMap<Integer, EdgeListRow>();
 	
 	public EdgeList(int startY, int endY) {
 		this.startY = startY;
 		this.endY = endY;
+		
+		// Initilialise rows with empty EdgeListRows
+		for (int y = startY; y <= endY; y++) {
+			rows.put(y, new EdgeListRow());
+		}
 	}
 
 	public int getStartY() {
@@ -31,24 +36,21 @@ public class EdgeList {
 	}
 
 	public float getLeftX(int y) {
-		return rows.get(y)[0];
+		return rows.get(y).leftX;
 	}
 
 	public float getRightX(int y) {
-		return rows.get(y)[1];
+		return rows.get(y).rightX;
 	}
 
 	public float getLeftZ(int y) {
-		return rows.get(y)[2];
+		return rows.get(y).leftZ;
 	}
 
 	public float getRightZ(int y) {
-		return rows.get(y)[3];
+		return rows.get(y).rightZ;
 	}
 	
-	public void addRow(int y, float xLeft, float xRight, float zLeft, float zRight) {
-		rows.put(y, new Float[]{xLeft, xRight, zLeft, zRight});
-	}
 }
 
 // code for comp261 assignments
