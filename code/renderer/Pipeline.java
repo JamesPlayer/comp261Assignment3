@@ -44,7 +44,7 @@ public class Pipeline {
 		float multiplier = 1 / (float) 255;
 		
 		// Ignore lightColor if lightDirection is coming from the back
-		if (lightDirection.z > 0) {
+		if (cosTheta < 0) {
 			lightColor = new Color(0, 0, 0);
 		}
 		
