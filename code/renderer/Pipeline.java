@@ -114,7 +114,10 @@ public class Pipeline {
 	 * slides.
 	 */
 	public static EdgeList computeEdgeList(Polygon poly) {
-		// TODO fill this in.
+		
+		float ymin = Math.min(poly.vertices[0].y, Math.min(poly.vertices[1].y, poly.vertices[2].y));
+		float ymax = Math.max(poly.vertices[0].y, Math.max(poly.vertices[1].y, poly.vertices[2].y));
+		
 		return null;
 	}
 
