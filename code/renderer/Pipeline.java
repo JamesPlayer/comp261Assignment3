@@ -138,8 +138,45 @@ public class Pipeline {
 	 * @return
 	 */
 	public static Scene scaleScene(Scene scene) {
-		// TODO fill this in.
-		return null;
+		
+		List<Polygon> newPolygons = new ArrayList<Polygon>();
+		
+		float minY = Float.POSITIVE_INFINITY;
+		float maxY = Float.NEGATIVE_INFINITY;
+		float minX = Float.POSITIVE_INFINITY;
+		float maxX = Float.NEGATIVE_INFINITY;
+		
+		for (Polygon poly : scene.getPolygons()) {
+			for (Vector3D point : poly.getVertices()) {
+				minY = Math.min(minY, point.y);
+				maxY = Math.max(maxY, point.y);
+				minX = Math.min(minX, point.x);
+				maxX = Math.max(maxX, point.x);
+			}
+		}
+		
+		float scaleY = GUI.CANVAS_HEIGHT / (maxY - minY);
+		float scaleX = GUI.CANVAS_WIDTH / (maxX - minX);
+		
+		// Scale by smallest of the two values
+		float scale  = Math.min(scaleY, scaleX);
+		
+		for (Polygon poly : scene.getPolygons()) {
+			
+			Vector3D[] vertices = new Vector3D[3];
+			int i = 0;
+			
+			for (Vector3D point : poly.getVertices()) {
+				Vector3D newPoint;
+				newPoint = Transform.newScale(scale, scale, scale).multiply(point);
+				vertices[i] = newPoint;
+				i++;				
+			}
+			
+			newPolygons.add(new Polygon(vertices[0], vertices[1], vertices[2], poly.getReflectance()));
+		}
+		
+		return new Scene(newPolygons, scene.lightPos);
 	}
 
 	/**

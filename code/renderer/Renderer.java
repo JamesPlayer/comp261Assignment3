@@ -128,12 +128,14 @@ public class Renderer extends GUI {
 			}
 		}
 		
+		rotatedScene = Pipeline.scaleScene(rotatedScene);
+		
 		for (Polygon poly : rotatedScene.getPolygons()) {
 			if (Pipeline.isHidden(poly)) {
 				continue;
 			}
 			
-			Color polyColor = Pipeline.getShading(poly, rotatedScene.getLight(), Color.white, ambientLight);
+			Color polyColor = Pipeline.getShading(poly, rotatedScene.getLight(), Color.WHITE, ambientLight);
 			EdgeList edgeList = Pipeline.computeEdgeList(poly);
 			Pipeline.computeZBuffer(zbuffer, zdepth, edgeList, polyColor);
 		}
