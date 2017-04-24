@@ -56,9 +56,7 @@ public class Pipeline {
 		
 		normalizedBlue = ((multiplier*ambientLight.getBlue() + multiplier*lightColor.getBlue() * cosTheta) * multiplier*poly.getReflectance().getBlue());
 		b = (int) (normalizedBlue * 255);
-		
-		System.out.println(new Color(r, g, b).toString());
-		
+				
 		return new Color(r, g, b);
 	}
 	

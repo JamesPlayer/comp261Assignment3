@@ -95,9 +95,11 @@ public class Renderer extends GUI {
 		float[][] zdepth = new float[CANVAS_WIDTH][CANVAS_HEIGHT];
 		
 		// Initialize all pixels to be ambient color
+		// Initialize z-depth to be as large as possible
 		for (int x = 0; x < CANVAS_WIDTH; x++) {
 			for (int y = 0; y < CANVAS_HEIGHT; y++) {
 				zbuffer[x][y] = Color.GRAY;
+				zdepth[x][y] = Integer.MAX_VALUE;
 			}
 		}
 		
