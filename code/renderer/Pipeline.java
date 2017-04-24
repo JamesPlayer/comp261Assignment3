@@ -144,8 +144,13 @@ public class Pipeline {
 			}
 		}
 		
-		float translateY = -1 * minY;
-		float translateX = -1 * minX;
+		float yDelta = maxY - minY;
+		float xDelta = maxX - minX;
+		
+		float translateY = -1 * minY + (GUI.CANVAS_HEIGHT - yDelta) / 2;
+		float translateX = -1 * minX + (GUI.CANVAS_WIDTH - xDelta) / 2;
+		
+		System.out.println(translateX);
 		
 		for (Polygon poly : scene.getPolygons()) {
 			
@@ -189,8 +194,8 @@ public class Pipeline {
 			}
 		}
 		
-		float scaleY = GUI.CANVAS_HEIGHT / (maxY - minY);
-		float scaleX = GUI.CANVAS_WIDTH / (maxX - minX);
+		float scaleY = (GUI.CANVAS_HEIGHT/2) / (maxY - minY);
+		float scaleX = (GUI.CANVAS_WIDTH/2) / (maxX - minX);
 		
 		// Scale by smallest of the two values
 		float scale  = Math.min(scaleY, scaleX);

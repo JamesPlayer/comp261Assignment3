@@ -25,6 +25,8 @@ public class Renderer extends GUI {
 	
 	protected float rotationY = 0;
 	
+	protected float scale = 0;
+	
 	
 	
 	@Override
@@ -32,6 +34,7 @@ public class Renderer extends GUI {
 		
 		rotationX = 0;
 		rotationY = 0;
+		scale = 0;
 
 		/*
 		 * This method should parse the given file into a Scene object, which
@@ -115,7 +118,9 @@ public class Renderer extends GUI {
 		 * static method stubs in the Pipeline class, which you also need to
 		 * fill in.
 		 */
-		Scene rotatedScene = Pipeline.rotateScene(scene, rotationX, rotationY);
+		Scene rotatedScene = Pipeline.scaleScene(scene);
+		rotatedScene = Pipeline.rotateScene(rotatedScene, rotationX, rotationY);
+		rotatedScene = Pipeline.translateScene(rotatedScene);
 		
 		
 		Color[][] zbuffer = new Color[CANVAS_WIDTH][CANVAS_HEIGHT];
@@ -130,8 +135,8 @@ public class Renderer extends GUI {
 			}
 		}
 		
-		rotatedScene = Pipeline.scaleScene(rotatedScene);
-		rotatedScene = Pipeline.translateScene(rotatedScene);
+		
+		
 		
 		for (Polygon poly : rotatedScene.getPolygons()) {
 			if (Pipeline.isHidden(poly)) {
