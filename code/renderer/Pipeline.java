@@ -143,13 +143,13 @@ public class Pipeline {
 			
 			// Going down
 			if (edge[0].y < edge[1].y) {
-				while (y <= Math.round(edge[1].y)) {
+				while (y <= Math.floor(edge[1].y)) {
 					edgeList.rows.get(y).leftX = x;
 					x = x + slope;
 					y++;
 				}
 			} else {
-				while (y >= Math.round(edge[1].y)) {
+				while (y >= Math.ceil(edge[1].y)) {
 					edgeList.rows.get(y).rightX = x;
 					x = x - slope;
 					y--;
@@ -170,13 +170,13 @@ public class Pipeline {
 			
 			// Going down
 			if (edge[0].y < edge[1].y) {
-				while (y <= Math.round(edge[1].y)) {
+				while (y <= Math.floor(edge[1].y)) {
 					edgeList.rows.get(y).leftZ = z;
 					z = z + slope;
 					y++;
 				}
 			} else {
-				while (y >= Math.round(edge[1].y)) {
+				while (y >= Math.ceil(edge[1].y)) {
 					edgeList.rows.get(y).rightZ = z;
 					z = z - slope;
 					y--;
@@ -209,13 +209,18 @@ public class Pipeline {
 		
 		for (int y = polyEdgeList.startY; y <= polyEdgeList.endY; y++) {
 			slope = (polyEdgeList.getRightZ(y) - polyEdgeList.getLeftZ(y)) / (float) (polyEdgeList.getRightX(y) - polyEdgeList.getLeftX(y));
-			z = Math.round(polyEdgeList.getLeftZ(y));
-			x = Math.round(polyEdgeList.getLeftX(y));
+			z = (float) Math.floor(polyEdgeList.getLeftZ(y));
+			x = (float) Math.floor(polyEdgeList.getLeftX(y));
 			
-			while (x <= Math.round(polyEdgeList.getRightX(y))) {
-				if (z < zdepth[(int) x][y]) {
-					zbuffer[(int) x][y] = polyColor;
-					zdepth[(int) x][y] = z;
+			while (x <= Math.floor(polyEdgeList.getRightX(y))) {
+				if (
+					(int) x >= 0 &&
+					y >= 0 &&
+					(int) x < zbuffer.length && 
+					y < zbuffer[(int) x].length &&
+					z < zdepth[(int) x][y]) {
+						zbuffer[(int) x][y] = polyColor;
+						zdepth[(int) x][y] = z;
 				}
 				
 				z = z + slope;
