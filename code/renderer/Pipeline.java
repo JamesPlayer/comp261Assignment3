@@ -1,6 +1,8 @@
 package renderer;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import renderer.Scene.Polygon;
 
@@ -83,8 +85,39 @@ public class Pipeline {
 	 *         rotated accordingly.
 	 */
 	public static Scene rotateScene(Scene scene, float xRot, float yRot) {
-		// TODO fill this in.
-		return null;
+		
+		List<Polygon> newPolygons = new ArrayList<Polygon>();
+		Vector3D newLightPos;
+		
+		// Rotate polygons
+		for (Polygon poly : scene.getPolygons()) {
+			
+			Vector3D[] vertices = new Vector3D[3];
+			int i = 0;
+			
+			for (Vector3D point : poly.getVertices()) {
+				
+				Vector3D newPoint;
+				
+				// Rotate along x
+				newPoint = Transform.newXRotation(xRot).multiply(point);
+				
+				// Rotate along y
+				newPoint = Transform.newYRotation(yRot).multiply(newPoint);
+				
+				vertices[i] = newPoint;
+				
+				i++;				
+			}
+			
+			newPolygons.add(new Polygon(vertices[0], vertices[1], vertices[2], poly.getReflectance()));
+		}
+		
+		// Rotate light position
+		newLightPos = Transform.newXRotation(xRot).multiply(scene.getLight());
+		newLightPos = Transform.newYRotation(yRot).multiply(newLightPos);
+		
+		return new Scene(newPolygons, newLightPos);
 	}
 
 	/**
