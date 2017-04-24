@@ -81,7 +81,8 @@ public class Renderer extends GUI {
 
 	@Override
 	protected BufferedImage render() {
-		// TODO fill this in.
+		
+		if (scene == null) return null;
 
 		/*
 		 * This method should put together the pieces of your renderer, as
@@ -89,7 +90,29 @@ public class Renderer extends GUI {
 		 * static method stubs in the Pipeline class, which you also need to
 		 * fill in.
 		 */
-		return null;
+		
+		Color[][] zbuffer = new Color[CANVAS_WIDTH][CANVAS_HEIGHT];
+		float[][] zdepth = new float[CANVAS_WIDTH][CANVAS_HEIGHT];
+		
+		// Initialize all pixels to be ambient color
+		for (int x = 0; x < CANVAS_WIDTH; x++) {
+			for (int y = 0; y < CANVAS_HEIGHT; y++) {
+				zbuffer[x][y] = Color.GRAY;
+			}
+		}
+		
+		for (Polygon poly : scene.getPolygons()) {
+			if (Pipeline.isHidden(poly)) {
+				continue;
+			}
+			
+			Color polyColor = Pipeline.getShading(poly, scene.getLight(), Color.GRAY, Color.GRAY);
+			EdgeList edgeList = Pipeline.computeEdgeList(poly);
+			Pipeline.computeZBuffer(zbuffer, zdepth, edgeList, polyColor);
+		}
+		
+		return convertBitmapToImage(zbuffer);
+		
 	}
 
 	/**
