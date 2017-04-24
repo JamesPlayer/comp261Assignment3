@@ -19,7 +19,13 @@ public class Renderer extends GUI {
 	
 	protected Scene scene = null;
 	
-	public Color ambientLight = new Color(128, 128, 128);
+	protected Color ambientLight = new Color(128, 128, 128);
+	
+	protected float rotationX = 0;
+	
+	protected float rotationY = 0;
+	
+	
 	
 	@Override
 	protected void onLoad(File file) {
@@ -73,14 +79,21 @@ public class Renderer extends GUI {
 		
 		return new Scene(polygons, light);
 	}
-
+	
 	@Override
 	protected void onKeyPress(KeyEvent ev) {
-		// TODO fill this in.
-
-		/*
-		 * This method should be used to rotate the user's viewpoint.
-		 */
+		if (ev.getKeyCode() == KeyEvent.VK_LEFT
+				|| Character.toUpperCase(ev.getKeyChar()) == 'A')
+			rotationY -= 0.1f;
+		else if (ev.getKeyCode() == KeyEvent.VK_RIGHT
+				|| Character.toUpperCase(ev.getKeyChar()) == 'D')
+			rotationY += 0.1f;
+		else if (ev.getKeyCode() == KeyEvent.VK_UP
+				|| Character.toUpperCase(ev.getKeyChar()) == 'W')
+			rotationX -= 0.1f;
+		else if (ev.getKeyCode() == KeyEvent.VK_DOWN
+				|| Character.toUpperCase(ev.getKeyChar()) == 'S')
+			rotationX += 0.1f;
 	}
 	
 	protected void onAmbientColorChange(ChangeEvent e) {
@@ -100,7 +113,7 @@ public class Renderer extends GUI {
 		 * static method stubs in the Pipeline class, which you also need to
 		 * fill in.
 		 */
-		
+		Scene rotatedScene = Pipeline.rotateScene(scene, rotationX, rotationY);
 		
 		
 		Color[][] zbuffer = new Color[CANVAS_WIDTH][CANVAS_HEIGHT];
@@ -115,12 +128,12 @@ public class Renderer extends GUI {
 			}
 		}
 		
-		for (Polygon poly : scene.getPolygons()) {
+		for (Polygon poly : rotatedScene.getPolygons()) {
 			if (Pipeline.isHidden(poly)) {
 				continue;
 			}
 			
-			Color polyColor = Pipeline.getShading(poly, scene.getLight(), Color.white, ambientLight);
+			Color polyColor = Pipeline.getShading(poly, rotatedScene.getLight(), Color.white, ambientLight);
 			EdgeList edgeList = Pipeline.computeEdgeList(poly);
 			Pipeline.computeZBuffer(zbuffer, zdepth, edgeList, polyColor);
 		}
