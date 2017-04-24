@@ -204,7 +204,24 @@ public class Pipeline {
 	 *            The colour of the polygon to add into the zbuffer.
 	 */
 	public static void computeZBuffer(Color[][] zbuffer, float[][] zdepth, EdgeList polyEdgeList, Color polyColor) {
-		// TODO fill this in.
+		
+		float slope, z, x;
+		
+		for (int y = polyEdgeList.startY; y <= polyEdgeList.endY; y++) {
+			slope = (polyEdgeList.getRightZ(y) - polyEdgeList.getLeftZ(y)) / (float) (polyEdgeList.getRightX(y) - polyEdgeList.getLeftX(y));
+			z = Math.round(polyEdgeList.getLeftZ(y));
+			x = Math.round(polyEdgeList.getLeftX(y));
+			
+			while (x <= Math.round(polyEdgeList.getRightX(y))) {
+				if (z < zdepth[(int) x][y]) {
+					zbuffer[(int) x][y] = polyColor;
+					zdepth[(int) x][y] = z;
+				}
+				
+				z = z + slope;
+				x++;
+			}
+		}
 	}
 }
 

@@ -35,13 +35,13 @@ public class ZBufferTests {
 		Color col = new Color(100, 0, 0);
 
 		// subclass EdgeList to return some dummy values.
-		EdgeList el = new EdgeList(0, 10) {
+		EdgeList el = new EdgeList(0, 9) {
 			public int getStartY() {
 				return 0;
 			}
 
 			public int getEndY() {
-				return 10;
+				return 9;
 			}
 
 			public float getLeftX(int y) {
@@ -49,7 +49,7 @@ public class ZBufferTests {
 			}
 
 			public float getRightX(int y) {
-				return 10;
+				return 9;
 			}
 
 			public float getLeftZ(int y) {
@@ -95,13 +95,13 @@ public class ZBufferTests {
 		Color col = new Color(100, 0, 0);
 
 		// subclass EdgeList to return some dummy values.
-		EdgeList el = new EdgeList(0, 10) {
+		EdgeList el = new EdgeList(0, 9) {
 			public int getStartY() {
 				return 0;
 			}
 
 			public int getEndY() {
-				return 10;
+				return 9;
 			}
 
 			public float getLeftX(int y) {
@@ -109,7 +109,7 @@ public class ZBufferTests {
 			}
 
 			public float getRightX(int y) {
-				return 10;
+				return 9;
 			}
 
 			public float getLeftZ(int y) {
@@ -153,13 +153,13 @@ public class ZBufferTests {
 		Color col = new Color(100, 0, 0);
 
 		// Let's make a triangle in the edge list.
-		EdgeList el = new EdgeList(0, 10) {
+		EdgeList el = new EdgeList(0, 9) {
 			public int getStartY() {
 				return 0;
 			}
 
 			public int getEndY() {
-				return 10;
+				return 9;
 			}
 
 			public float getLeftX(int y) {
@@ -185,7 +185,7 @@ public class ZBufferTests {
 		// now ensure that all values outside the triangle are left as null.
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				if (i < j)
+				if (i <= j)
 					assertEquals(col, zbuffer[i][j]);
 				else
 					assertEquals(null, zbuffer[i][j]);
