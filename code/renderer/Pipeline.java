@@ -127,8 +127,42 @@ public class Pipeline {
 	 * @return
 	 */
 	public static Scene translateScene(Scene scene) {
-		// TODO fill this in.
-		return null;
+		// Center horizontally and vertically
+		List<Polygon> newPolygons = new ArrayList<Polygon>();
+		
+		float minY = Float.POSITIVE_INFINITY;
+		float maxY = Float.NEGATIVE_INFINITY;
+		float minX = Float.POSITIVE_INFINITY;
+		float maxX = Float.NEGATIVE_INFINITY;
+		
+		for (Polygon poly : scene.getPolygons()) {
+			for (Vector3D point : poly.getVertices()) {
+				minY = Math.min(minY, point.y);
+				maxY = Math.max(maxY, point.y);
+				minX = Math.min(minX, point.x);
+				maxX = Math.max(maxX, point.x);
+			}
+		}
+		
+		float translateY = -1 * minY;
+		float translateX = -1 * minX;
+		
+		for (Polygon poly : scene.getPolygons()) {
+			
+			Vector3D[] vertices = new Vector3D[3];
+			int i = 0;
+			
+			for (Vector3D point : poly.getVertices()) {
+				Vector3D newPoint;
+				newPoint = Transform.newTranslation(translateX, translateY, 0).multiply(point);
+				vertices[i] = newPoint;
+				i++;				
+			}
+			
+			newPolygons.add(new Polygon(vertices[0], vertices[1], vertices[2], poly.getReflectance()));
+		}
+		
+		return new Scene(newPolygons, scene.lightPos);
 	}
 
 	/**

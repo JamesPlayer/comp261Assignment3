@@ -29,7 +29,9 @@ public class Renderer extends GUI {
 	
 	@Override
 	protected void onLoad(File file) {
-		// TODO fill this in.
+		
+		rotationX = 0;
+		rotationY = 0;
 
 		/*
 		 * This method should parse the given file into a Scene object, which
@@ -129,6 +131,7 @@ public class Renderer extends GUI {
 		}
 		
 		rotatedScene = Pipeline.scaleScene(rotatedScene);
+		rotatedScene = Pipeline.translateScene(rotatedScene);
 		
 		for (Polygon poly : rotatedScene.getPolygons()) {
 			if (Pipeline.isHidden(poly)) {
