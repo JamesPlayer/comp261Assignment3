@@ -57,7 +57,7 @@ public class Pipeline {
 		normalizedBlue = ((multiplier*ambientLight.getBlue() + multiplier*lightColor.getBlue() * cosTheta) * multiplier*poly.getReflectance().getBlue());
 		b = (int) (normalizedBlue * 255);
 				
-		return new Color(r, g, b);
+		return new Color(Math.min(r, 255), Math.min(g, 255), Math.min(b, 255));
 	}
 	
 	public static Vector3D getNormal(Polygon poly) {

@@ -23,6 +23,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * A simple GUI, similar to the one in assignments 1 and 2, that you can base
@@ -164,6 +166,30 @@ public abstract class GUI {
 		sliderparty.add(red);
 		sliderparty.add(green);
 		sliderparty.add(blue);
+		
+		red.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onAmbientColorChange(e);
+				redraw();
+			}		
+		});
+		
+		green.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onAmbientColorChange(e);
+				redraw();
+			}		
+		});
+		
+		blue.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onAmbientColorChange(e);
+				redraw();
+			}		
+		});
 
 		// this is not a best-practices way of doing key listening; instead you
 		// should use either a KeyListener or an InputMap/ActionMap combo. but
@@ -202,6 +228,11 @@ public abstract class GUI {
 
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	protected void onAmbientColorChange(ChangeEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

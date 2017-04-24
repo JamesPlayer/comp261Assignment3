@@ -11,11 +11,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.event.ChangeEvent;
+
 import renderer.Scene.Polygon;
 
 public class Renderer extends GUI {
 	
 	protected Scene scene = null;
+	
+	public Color ambientLight = new Color(128, 128, 128);
 	
 	@Override
 	protected void onLoad(File file) {
@@ -78,6 +82,12 @@ public class Renderer extends GUI {
 		 * This method should be used to rotate the user's viewpoint.
 		 */
 	}
+	
+	protected void onAmbientColorChange(ChangeEvent e) {
+		int[] sliderColor = getAmbientLight();
+		ambientLight = new Color(sliderColor[0], sliderColor[1], sliderColor[2]);
+		
+	}
 
 	@Override
 	protected BufferedImage render() {
@@ -91,6 +101,8 @@ public class Renderer extends GUI {
 		 * fill in.
 		 */
 		
+		
+		
 		Color[][] zbuffer = new Color[CANVAS_WIDTH][CANVAS_HEIGHT];
 		float[][] zdepth = new float[CANVAS_WIDTH][CANVAS_HEIGHT];
 		
@@ -98,7 +110,7 @@ public class Renderer extends GUI {
 		// Initialize z-depth to be as large as possible
 		for (int x = 0; x < CANVAS_WIDTH; x++) {
 			for (int y = 0; y < CANVAS_HEIGHT; y++) {
-				zbuffer[x][y] = Color.GRAY;
+				zbuffer[x][y] = ambientLight;
 				zdepth[x][y] = Integer.MAX_VALUE;
 			}
 		}
@@ -108,7 +120,7 @@ public class Renderer extends GUI {
 				continue;
 			}
 			
-			Color polyColor = Pipeline.getShading(poly, scene.getLight(), Color.GRAY, Color.GRAY);
+			Color polyColor = Pipeline.getShading(poly, scene.getLight(), Color.white, ambientLight);
 			EdgeList edgeList = Pipeline.computeEdgeList(poly);
 			Pipeline.computeZBuffer(zbuffer, zdepth, edgeList, polyColor);
 		}
