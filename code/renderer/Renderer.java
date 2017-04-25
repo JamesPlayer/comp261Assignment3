@@ -25,7 +25,7 @@ public class Renderer extends GUI {
 	
 	protected float rotationY = 0;
 	
-	protected float scale = 0;
+	protected boolean scaled = false;
 	
 	
 	
@@ -34,7 +34,7 @@ public class Renderer extends GUI {
 		
 		rotationX = 0;
 		rotationY = 0;
-		scale = 0;
+		scaled = false;
 
 		/*
 		 * This method should parse the given file into a Scene object, which
@@ -88,23 +88,32 @@ public class Renderer extends GUI {
 	@Override
 	protected void onKeyPress(KeyEvent ev) {
 		if (ev.getKeyCode() == KeyEvent.VK_LEFT
-				|| Character.toUpperCase(ev.getKeyChar()) == 'A')
-			rotationY -= 0.1f;
+				|| Character.toUpperCase(ev.getKeyChar()) == 'A') {			
+			rotationY = 0.1f; 
+			rotationX = 0;
+		}
 		else if (ev.getKeyCode() == KeyEvent.VK_RIGHT
-				|| Character.toUpperCase(ev.getKeyChar()) == 'D')
-			rotationY += 0.1f;
+				|| Character.toUpperCase(ev.getKeyChar()) == 'D') {			
+			rotationY = -0.1f;
+			rotationX = 0;
+		}
 		else if (ev.getKeyCode() == KeyEvent.VK_UP
-				|| Character.toUpperCase(ev.getKeyChar()) == 'W')
-			rotationX -= 0.1f;
+				|| Character.toUpperCase(ev.getKeyChar()) == 'W') {			
+			rotationY = 0;
+			rotationX = -0.1f;
+		}
 		else if (ev.getKeyCode() == KeyEvent.VK_DOWN
-				|| Character.toUpperCase(ev.getKeyChar()) == 'S')
-			rotationX += 0.1f;
+				|| Character.toUpperCase(ev.getKeyChar()) == 'S') {			
+			rotationY = 0;
+			rotationX = 0.1f;
+		}
 	}
 	
 	protected void onAmbientColorChange(ChangeEvent e) {
 		int[] sliderColor = getAmbientLight();
 		ambientLight = new Color(sliderColor[0], sliderColor[1], sliderColor[2]);
-		
+		rotationY = 0;
+		rotationX = 0;
 	}
 
 	@Override
@@ -118,9 +127,13 @@ public class Renderer extends GUI {
 		 * static method stubs in the Pipeline class, which you also need to
 		 * fill in.
 		 */
-		Scene rotatedScene = Pipeline.scaleScene(scene);
-		rotatedScene = Pipeline.rotateScene(rotatedScene, rotationX, rotationY);
-		rotatedScene = Pipeline.translateScene(rotatedScene);
+		
+		if (!scaled) {			
+			scene = Pipeline.scaleScene(scene);
+			scaled = true;
+		}
+		scene = Pipeline.rotateScene(scene, rotationX, rotationY);
+		scene = Pipeline.translateScene(scene);
 		
 		
 		Color[][] zbuffer = new Color[CANVAS_WIDTH][CANVAS_HEIGHT];
@@ -138,12 +151,12 @@ public class Renderer extends GUI {
 		
 		
 		
-		for (Polygon poly : rotatedScene.getPolygons()) {
+		for (Polygon poly : scene.getPolygons()) {
 			if (Pipeline.isHidden(poly)) {
 				continue;
 			}
 			
-			Color polyColor = Pipeline.getShading(poly, rotatedScene.getLight(), Color.WHITE, ambientLight);
+			Color polyColor = Pipeline.getShading(poly, scene.getLight(), Color.WHITE, ambientLight);
 			EdgeList edgeList = Pipeline.computeEdgeList(poly);
 			Pipeline.computeZBuffer(zbuffer, zdepth, edgeList, polyColor);
 		}

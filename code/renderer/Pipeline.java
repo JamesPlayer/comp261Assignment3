@@ -150,8 +150,6 @@ public class Pipeline {
 		float translateY = -1 * minY + (GUI.CANVAS_HEIGHT - yDelta) / 2;
 		float translateX = -1 * minX + (GUI.CANVAS_WIDTH - xDelta) / 2;
 		
-		System.out.println(translateX);
-		
 		for (Polygon poly : scene.getPolygons()) {
 			
 			Vector3D[] vertices = new Vector3D[3];
