@@ -21,6 +21,10 @@ public class Renderer extends GUI {
 	
 	protected Color ambientLight = new Color(128, 128, 128);
 	
+	protected Color bottomLeftLight = new Color(0, 0, 0);
+	
+	protected Color bottomRightLight = new Color(0, 0, 0);
+	
 	protected float rotationX = 0;
 	
 	protected float rotationY = 0;
@@ -109,9 +113,15 @@ public class Renderer extends GUI {
 		}
 	}
 	
-	protected void onAmbientColorChange(ChangeEvent e) {
-		int[] sliderColor = getAmbientLight();
-		ambientLight = new Color(sliderColor[0], sliderColor[1], sliderColor[2]);
+	protected void onLightChange(ChangeEvent e) {
+		int[] ambientColor = getAmbientLight();
+		int[] bottomLeftColor = getBottomLeftLight();
+		int[] bottomRightColor = getBottomRightLight();
+		
+		ambientLight = new Color(ambientColor[0], ambientColor[1], ambientColor[2]);
+		bottomLeftLight = new Color(bottomLeftColor[0], bottomLeftColor[1], bottomLeftColor[2]);
+		bottomRightLight = new Color(bottomRightColor[0], bottomRightColor[1], bottomRightColor[2]);
+		
 		rotationY = 0;
 		rotationX = 0;
 	}
@@ -147,16 +157,13 @@ public class Renderer extends GUI {
 				zdepth[x][y] = Integer.MAX_VALUE;
 			}
 		}
-		
-		
-		
-		
+	
 		for (Polygon poly : scene.getPolygons()) {
 			if (Pipeline.isHidden(poly)) {
 				continue;
 			}
 			
-			Color polyColor = Pipeline.getShading(poly, scene.getLight(), Color.WHITE, ambientLight);
+			Color polyColor = Pipeline.getShading(poly, scene.getLight(), Color.WHITE, ambientLight, bottomLeftLight, bottomRightLight);
 			EdgeList edgeList = Pipeline.computeEdgeList(poly);
 			Pipeline.computeZBuffer(zbuffer, zdepth, edgeList, polyColor);
 		}

@@ -38,7 +38,7 @@ public class Pipeline {
 	 *            The ambient light in the scene, i.e. light that doesn't depend
 	 *            on the direction.
 	 */
-	public static Color getShading(Polygon poly, Vector3D lightDirection, Color lightColor, Color ambientLight) {
+	public static Color getShading(Polygon poly, Vector3D lightDirection, Color lightColor, Color ambientLight, Color bottomLeftColor, Color bottomRightColor) {
 		int r, g, b;
 		float normalizedRed, normalizedGreen, normalizedBlue;
 		Vector3D unitNormal = getNormal(poly).unitVector();
@@ -50,13 +50,42 @@ public class Pipeline {
 			lightColor = new Color(0, 0, 0);
 		}
 		
-		normalizedRed = ((multiplier*ambientLight.getRed() + multiplier*lightColor.getRed() * cosTheta) * multiplier*poly.getReflectance().getRed());
+		// Add-on: Extra light sources
+		Vector3D bottomLeftLightDirection = new Vector3D(-1, 1, -1);
+		Vector3D bottomRightLightDirection = new Vector3D(1, 1, -1);
+		float cosThetaBottomLeft = unitNormal.cosTheta(bottomLeftLightDirection);
+		float cosThetaBottomRight = unitNormal.cosTheta(bottomRightLightDirection);
+		
+		if (cosThetaBottomLeft < 0) {
+			bottomLeftColor = new Color(0, 0, 0);
+		}
+		
+		if (cosThetaBottomRight < 0) {
+			bottomRightColor = new Color(0, 0, 0);
+		}
+		
+		normalizedRed = ((
+				(multiplier*ambientLight.getRed()) + 
+				(multiplier*bottomLeftColor.getRed() * cosThetaBottomLeft) +
+				(multiplier*bottomRightColor.getRed() * cosThetaBottomRight) +
+				multiplier*lightColor.getRed() * cosTheta) * 
+				multiplier*poly.getReflectance().getRed());
 		r = (int) (normalizedRed * 255);
 		
-		normalizedGreen = ((multiplier*ambientLight.getGreen() + multiplier*lightColor.getGreen() * cosTheta) * multiplier*poly.getReflectance().getGreen());
+		normalizedGreen = ((
+				(multiplier*ambientLight.getGreen()) + 
+				(multiplier*bottomLeftColor.getGreen() * cosThetaBottomLeft) +
+				(multiplier*bottomRightColor.getGreen() * cosThetaBottomRight) +
+				multiplier*lightColor.getGreen() * cosTheta) * 
+				multiplier*poly.getReflectance().getGreen());
 		g = (int) (normalizedGreen * 255);
 		
-		normalizedBlue = ((multiplier*ambientLight.getBlue() + multiplier*lightColor.getBlue() * cosTheta) * multiplier*poly.getReflectance().getBlue());
+		normalizedBlue = ((
+				(multiplier*ambientLight.getBlue()) + 
+				(multiplier*bottomLeftColor.getBlue() * cosThetaBottomLeft) +
+				(multiplier*bottomRightColor.getBlue() * cosThetaBottomRight) +
+				multiplier*lightColor.getBlue() * cosTheta) * 
+				multiplier*poly.getReflectance().getBlue());
 		b = (int) (normalizedBlue * 255);
 				
 		return new Color(Math.min(r, 255), Math.min(g, 255), Math.min(b, 255));

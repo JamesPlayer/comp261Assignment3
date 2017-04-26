@@ -72,6 +72,24 @@ public abstract class GUI {
 	public int[] getAmbientLight() {
 		return new int[] { red.getValue(), green.getValue(), blue.getValue() };
 	}
+	
+	public int[] getBottomRightLight() {
+		
+		int r = (int) (bottomRightRed.getValue() * (bottomRightIntensity.getValue() / (float) 100));
+		int g = (int) (bottomRightGreen.getValue() * (bottomRightIntensity.getValue() / (float) 100));
+		int b = (int) (bottomRightBlue.getValue() * (bottomRightIntensity.getValue() / (float) 100));
+		
+		return new int[] { r, g, b };
+	}
+	
+	public int[] getBottomLeftLight() {
+		
+		int r = (int) (bottomLeftRed.getValue() * (bottomLeftIntensity.getValue() / (float) 100));
+		int g = (int) (bottomLeftGreen.getValue() * (bottomLeftIntensity.getValue() / (float) 100));
+		int b = (int) (bottomLeftBlue.getValue() * (bottomLeftIntensity.getValue() / (float) 100));
+		
+		return new int[] { r, g, b };
+	}
 
 	public static final int CANVAS_WIDTH = 600;
 	public static final int CANVAS_HEIGHT = 600;
@@ -86,6 +104,16 @@ public abstract class GUI {
 	private final JSlider red = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
 	private final JSlider green = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
 	private final JSlider blue = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
+	
+	private final JSlider bottomLeftRed = new JSlider(JSlider.HORIZONTAL, 0, 255, 255);
+	private final JSlider bottomLeftGreen = new JSlider(JSlider.HORIZONTAL, 0, 255, 255);
+	private final JSlider bottomLeftBlue = new JSlider(JSlider.HORIZONTAL, 0, 255, 255);
+	private final JSlider bottomLeftIntensity = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+	
+	private final JSlider bottomRightRed = new JSlider(JSlider.HORIZONTAL, 0, 255, 255);
+	private final JSlider bottomRightGreen = new JSlider(JSlider.HORIZONTAL, 0, 255, 255);
+	private final JSlider bottomRightBlue = new JSlider(JSlider.HORIZONTAL, 0, 255, 255);
+	private final JSlider bottomRightIntensity = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
 
 	private static final Dimension DRAWING_SIZE = new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT);
 	private static final Dimension CONTROLS_SIZE = new Dimension(150, 600);
@@ -167,10 +195,29 @@ public abstract class GUI {
 		sliderparty.add(green);
 		sliderparty.add(blue);
 		
+		JPanel sliderparty2 = new JPanel();
+		sliderparty2.setLayout(new BoxLayout(sliderparty2, BoxLayout.PAGE_AXIS));
+		sliderparty2.setBorder(BorderFactory.createTitledBorder("Bottom Left Light"));
+
+		sliderparty2.add(bottomLeftRed);
+		sliderparty2.add(bottomLeftGreen);
+		sliderparty2.add(bottomLeftBlue);
+		sliderparty2.add(bottomLeftIntensity);
+		
+		JPanel sliderparty3 = new JPanel();
+		sliderparty3.setLayout(new BoxLayout(sliderparty3, BoxLayout.PAGE_AXIS));
+		sliderparty3.setBorder(BorderFactory.createTitledBorder("Bottom Right Light"));
+
+		sliderparty3.add(bottomRightRed);
+		sliderparty3.add(bottomRightGreen);
+		sliderparty3.add(bottomRightBlue);
+		sliderparty3.add(bottomRightIntensity);
+
+		
 		red.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				onAmbientColorChange(e);
+				onLightChange(e);
 				redraw();
 			}		
 		});
@@ -178,7 +225,7 @@ public abstract class GUI {
 		green.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				onAmbientColorChange(e);
+				onLightChange(e);
 				redraw();
 			}		
 		});
@@ -186,7 +233,71 @@ public abstract class GUI {
 		blue.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				onAmbientColorChange(e);
+				onLightChange(e);
+				redraw();
+			}		
+		});
+		
+		bottomLeftRed.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onLightChange(e);
+				redraw();
+			}		
+		});
+		
+		bottomLeftGreen.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onLightChange(e);
+				redraw();
+			}		
+		});
+		
+		bottomLeftBlue.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onLightChange(e);
+				redraw();
+			}		
+		});
+		
+		bottomLeftIntensity.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onLightChange(e);
+				redraw();
+			}		
+		});
+		
+		bottomRightRed.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onLightChange(e);
+				redraw();
+			}		
+		});
+		
+		bottomRightGreen.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onLightChange(e);
+				redraw();
+			}		
+		});
+		
+		bottomRightBlue.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onLightChange(e);
+				redraw();
+			}		
+		});
+		
+		bottomRightIntensity.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onLightChange(e);
 				redraw();
 			}		
 		});
@@ -219,6 +330,10 @@ public abstract class GUI {
 		controls.add(loadpanel);
 		controls.add(Box.createRigidArea(new Dimension(0, 15)));
 		controls.add(sliderparty);
+		controls.add(Box.createRigidArea(new Dimension(0, 15)));
+		controls.add(sliderparty2);
+		controls.add(Box.createRigidArea(new Dimension(0, 15)));
+		controls.add(sliderparty3);
 		// if i were going to add more GUI components, i'd do it here.
 		controls.add(Box.createVerticalGlue());
 
@@ -230,9 +345,8 @@ public abstract class GUI {
 		frame.setVisible(true);
 	}
 
-	protected void onAmbientColorChange(ChangeEvent e) {
-		// TODO Auto-generated method stub
-		
+	protected void onLightChange(ChangeEvent e) {
+		// TODO Auto-generated method stub		
 	}
 }
 
