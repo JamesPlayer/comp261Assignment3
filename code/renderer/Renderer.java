@@ -50,10 +50,7 @@ public class Renderer extends GUI {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
-		
+		}	
 	}
 	
 	protected Scene loadScene(File file) throws FileNotFoundException, IOException {
@@ -113,6 +110,9 @@ public class Renderer extends GUI {
 		}
 	}
 	
+	/**
+	 * Triggered by moving a slider in the GUI
+	 */
 	protected void onLightChange(ChangeEvent e) {
 		int[] ambientColor = getAmbientLight();
 		int[] bottomLeftColor = getBottomLeftLight();

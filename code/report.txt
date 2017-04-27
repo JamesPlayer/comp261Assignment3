@@ -1,0 +1,32 @@
+James Player
+301001129
+Assignment 3: 3D Rendering
+
+What the code does and doesn't do
+-----------------------------------
+
+The code reads in a txt file containing polygon and lighting information and renders the polygons
+with correct colors/lighting. The user can rotate the polygons using the left/right/up/down buttons.
+
+The user can also add a light source from the bottom left and bottom right corners, and change their
+colors/intensity using the sliders (top 3 sliders are color, bottom slider is intensity).
+
+The code does not use Gouraud shading to make smooth, curved surfaces, or use Phong shading.
+
+Bugs
+----
+
+Occasionally whiskers and holes can be seen around some of the polygons.
+
+One quirk which isn't necessarily a bug is that the bottom left and right light sources are fixed, whereas
+the incident light source given from the txt file moves when the viewing direction is changed (as per the 
+requirements).
+
+How was this tested?
+--------------------
+
+Unit tests for calculating edge list, hiding polygons, rotating polygons, calculating shading of a polygon,
+and calculating the z-buffer.
+
+Other than that, manual testing by loading all text files from the data folder, checking rendering vs the 
+example image that is given with each txt file.
