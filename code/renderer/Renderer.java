@@ -159,7 +159,8 @@ public class Renderer extends GUI {
 		}
 	
 		for (Polygon poly : scene.getPolygons()) {
-			if (Pipeline.isHidden(poly)) {
+			if (poly.isHidden || Pipeline.isHidden(poly)) {
+				poly.isHidden = true;
 				continue;
 			}
 			

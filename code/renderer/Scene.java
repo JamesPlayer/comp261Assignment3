@@ -40,6 +40,7 @@ public class Scene {
 	public static class Polygon {
 		Vector3D[] vertices;
 		Color reflectance;
+		public boolean isHidden;
 
 		/**
 		 * @param points
