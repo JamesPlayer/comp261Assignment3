@@ -221,8 +221,8 @@ public class Pipeline {
 			}
 		}
 		
-		float scaleY = (GUI.CANVAS_HEIGHT/2) / (maxY - minY);
-		float scaleX = (GUI.CANVAS_WIDTH/2) / (maxX - minX);
+		float scaleY = (float) ((GUI.CANVAS_HEIGHT - 350) / (maxY - minY));
+		float scaleX = (float) ((GUI.CANVAS_WIDTH - 350) / (maxX - minX));
 		
 		// Scale by smallest of the two values
 		float scale  = Math.min(scaleY, scaleX);
